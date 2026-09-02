@@ -157,9 +157,24 @@ knowing if adding more:
   About page's two source PNGs from ~22–26MB down to ~180–600KB each with
   no visible quality loss.
 
-## Deployment note
+## Deployment
 
-This is a client-side-routed SPA (`react-router-dom`'s `BrowserRouter`).
-Any static host needs to be configured to fall back to `index.html` for
-unknown paths (e.g. a direct visit to `/contact`), or that route will 404
-on a real server the way Vite's dev server doesn't.
+This is a client-side-routed SPA (`react-router-dom`'s `BrowserRouter`), so
+any static host needs to fall back to `index.html` for unknown paths (e.g. a
+direct visit to `/contact`), or that route will 404 on a real server the way
+Vite's dev server doesn't.
+
+Deployed on **Netlify** (free tier — chosen over Vercel's equivalent free
+tier specifically because Vercel's Hobby plan is restricted to
+non-commercial use in its ToS; Netlify's free tier has no such
+restriction, and AYNZEN is a real business site), via GitHub auto-deploy:
+- `netlify.toml` sets the build command (`npm run build`) and publish
+  directory (`dist`).
+- `public/_redirects` (copied verbatim into `dist/` by Vite) contains the
+  SPA fallback rule: `/*  /index.html  200`.
+- The only environment variable that needs to be set in Netlify's
+  dashboard (Site configuration → Environment variables) is
+  `VITE_WEB3FORMS_KEY` — same value as local `.env`, which is gitignored
+  and never committed.
+- Pushing to `main` on GitHub triggers an automatic rebuild + redeploy;
+  no manual deploy step going forward.
